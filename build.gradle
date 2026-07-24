@@ -1,0 +1,126 @@
+plugins {
+    id 'dev.architectury.loom' version '1.11-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.gradleup.shadow' version '8.3.6' apply false
+    id 'io.github.pacifistmc.forgix' version '2.+'
+}
+
+architectury {
+    minecraft = project.minecraft_version
+}
+
+forgix {
+    archiveBaseName = "$rootProject.archives_name"
+    archiveVersion = "$rootProject.mod_version-mc$rootProject.minecraft_version"
+    autoRun = true
+}
+
+allprojects {
+    group = rootProject.maven_group
+    version = "$rootProject.mod_version-mc$rootProject.minecraft_version"
+}
+
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
+
+    base {
+        // Set up a suffixed format for the mod jar names, e.g. `example-fabric`.
+        archivesName = "$rootProject.archives_name-$project.name"
+    }
+
+    repositories {
+        // Add repositories to retrieve artifacts from in here.
+        // You should only use this when depending on other mods because
+        // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+        // See https://docs.gradle.org/current/userguide/declaring_repositories.html
+        // for more information about repositories.
+
+        maven {
+            name = "Terraformers"
+            url = "https://maven.terraformersmc.com/"
+        }
+    }
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    dependencies {
+        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+        mappings loom.officialMojangMappings()
+    }
+
+    java {
+        // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+        // if it is present.
+        // If you remove this line, sources will not be generated.
+        withSourcesJar()
+
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
+
+    processResources {
+        inputs.property 'minecraft_version', rootProject.minecraft_version
+        inputs.property 'minecraft_version_range', rootProject.minecraft_version_range
+        inputs.property 'mod_name', rootProject.mod_name
+        inputs.property 'mod_id', rootProject.mod_id
+        inputs.property 'version', rootProject.mod_version
+        inputs.property 'description', rootProject.mod_description
+        inputs.property 'issue_tracker_url', rootProject.issue_tracker_url
+        inputs.property 'sources_url', rootProject.sources_url
+        inputs.property 'license', rootProject.license
+        inputs.property 'mod_authors', rootProject.mod_authors
+        inputs.property 'icon_path', rootProject.icon_path
+        inputs.property 'fabric_api_version', rootProject.fabric_api_version
+        inputs.property 'fabric_loader_version', rootProject.fabric_loader_version
+        inputs.property 'forge_version', rootProject.forge_version
+        inputs.property 'forge_version_range', rootProject.forge_version_range
+        inputs.property 'architectury_api_version', rootProject.architectury_api_version
+        inputs.property 'architectury_version_range', rootProject.architectury_version_range
+
+        filesMatching(['fabric.mod.json', 'META-INF/mods.toml']) {
+            expand minecraft_version: inputs.properties.minecraft_version,
+                    minecraft_version_range: inputs.properties.minecraft_version_range,
+                    mod_id: inputs.properties.mod_id,
+                    mod_name: inputs.properties.mod_name,
+                    version: inputs.properties.version,
+                    description: inputs.properties.description,
+                    sources_url: inputs.properties.sources_url,
+                    issue_tracker_url: inputs.properties.issue_tracker_url,
+                    license: inputs.properties.license,
+                    mod_authors: inputs.properties.mod_authors,
+                    icon_path: inputs.properties.icon_path,
+                    fabric_api_version: inputs.properties.fabric_api_version,
+                    fabric_loader_version: inputs.properties.fabric_loader_version,
+                    forge_version: inputs.properties.forge_version,
+                    forge_version_range: inputs.properties.forge_version_range,
+                    architectury_api_version: inputs.properties.architectury_api_version,
+                    architectury_version_range: inputs.properties.architectury_version_range
+        }
+    }
+
+    // Configure Maven publishing.
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = base.archivesName.get()
+                from components.java
+            }
+        }
+
+        // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+        repositories {
+            // Add repositories to publish to here.
+            // Notice: This block does NOT have the same function as the block in the top level.
+            // The repositories here will be used for publishing your artifact, not for
+            // retrieving dependencies.
+        }
+    }
+}

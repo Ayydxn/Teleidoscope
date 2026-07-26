@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "me.ayydxn.teleidoscope.fabric.TeleidoscopeFabricMod"
+    ],
+    "modmenu": [
+      "me.ayydxn.teleidoscope.fabric.TeleidoscopeModMenuEntrypoint"
     ]
   },
   "mixins": [
@@ -26,6 +29,7 @@
     "minecraft": "~${minecraft_version}",
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
-    "architectury": ">=${architectury_api_version}"
+    "architectury": ">=${architectury_api_version}",
+    "yet_another_config_lib_v3": ">=${yacl_version}"
   }
 }

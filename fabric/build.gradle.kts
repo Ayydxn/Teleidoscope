@@ -33,6 +33,7 @@ dependencies {
 
     /* -- Mod Dependencies -- */
     modImplementation("com.terraformersmc:modmenu:${rootProject.extra["modmenu_version"]}")
+    modImplementation("dev.isxander:yet-another-config-lib:${rootProject.extra["yacl_version"]}-fabric")
 
     add("common", project(mapOf("path" to ":common", "configuration" to "namedElements")))
     add("shadowBundle", project(mapOf("path" to ":common", "configuration" to "transformProductionFabric")))

@@ -32,7 +32,7 @@ allprojects {
 
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
-        options.release = 21
+        options.release = 17
     }
 }
 
@@ -57,6 +57,18 @@ subprojects {
         maven("https://maven.parchmentmc.org") {
             name = "ParchmentMC"
         }
+
+        maven("https://maven.isxander.dev/releases") {
+            name = "Xander Maven"
+        }
+
+        maven("https://maven.quiltmc.org/repository/release") {
+            name = "Quilt"
+        }
+
+        maven("https://oss.sonatype.org/content/repositories/snapshots") {
+            name = "Sonatype"
+        }
     }
 
     dependencies {
@@ -75,7 +87,7 @@ subprojects {
             "minecraft_version_range" to rootProject.extra["minecraft_version_range"],
             "mod_id" to rootProject.extra["mod_id"],
             "mod_name" to rootProject.extra["mod_name"],
-            "version" to rootProject.extra["mod_version"],
+            "version" to "${rootProject.extra["mod_version"]}-mc${rootProject.extra["minecraft_version"]}",
             "description" to rootProject.extra["mod_description"],
             "sources_url" to rootProject.extra["sources_url"],
             "issue_tracker_url" to rootProject.extra["issue_tracker_url"],
@@ -87,7 +99,9 @@ subprojects {
             "forge_version" to rootProject.extra["forge_version"],
             "forge_version_range" to rootProject.extra["forge_version_range"],
             "architectury_api_version" to rootProject.extra["architectury_api_version"],
-            "architectury_version_range" to rootProject.extra["architectury_version_range"]
+            "architectury_version_range" to rootProject.extra["architectury_version_range"],
+            "yacl_version" to rootProject.extra["yacl_version"],
+            "yacl_version_range" to rootProject.extra["yacl_version_range"]
         )
 
         inputs.properties(expandProps)

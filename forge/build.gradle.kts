@@ -35,6 +35,14 @@ dependencies {
     "forge"("net.minecraftforge:forge:${rootProject.extra["forge_version"]}")
     modImplementation("dev.architectury:architectury-forge:${rootProject.extra["architectury_api_version"]}")
 
+    /* -- Mod Dependencies -- */
+    modImplementation("dev.isxander:yet-another-config-lib:${rootProject.extra["yacl_version"]}-forge") {
+        isTransitive = false;
+    }
+
+    /* -- Dependencies -- */
+    forgeRuntimeLibrary("org.quiltmc.parsers:gson:0.3.0") // Needed by YACL. Forge will crash at launch without this.
+
     add("common", project(mapOf("path" to ":common", "configuration" to "namedElements")))
     add("shadowBundle", project(mapOf("path" to ":common", "configuration" to "transformProductionForge")))
 }

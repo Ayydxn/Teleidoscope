@@ -1,0 +1,26 @@
+{
+  "teleidoscope.options.category.global": "Global",
+  "teleidoscope.options.global.openWorldOnLaunch": "Open World On Launch",
+  "teleidoscope.options.global.openWorldOnLaunch.description": "Once loaded into a world, it will be automatically opened to your Steam friends.",
+  "teleidoscope.options.global.isRichPresenceEnabled": "Enable Rich Presence",
+  "teleidoscope.options.global.isRichPresenceEnabled.description": "Allows your Steam friends to see what world you're playing in from your friends list status, and lets them join directly through Steam's own \"Join Game\" button.\n\nTurning this off still allows direct invites — it only affects what friends automatically see.",
+  "teleidoscope.options.global.showModMismatchDiffOnBlock": "Show Mod Mismatch Difference On Block",
+  "teleidoscope.options.global.showModMismatchDiffOnBlock.description": "If a player is denied connection to your world due to a mismatch in installed mods or configs, you (and they) will be shown exactly which ones differ, rather than just a generic \"connection failed\" message.",
+  "teleidoscope.options.global.handshakeEnforcement": "Handshake Enforcement",
+  "teleidoscope.options.global.handshakeEnforcement.description": "Determines how players attempting to join with differing mod lists or configs are handled.\n\n§lStrict§r - Blocks the connection.\n\n§lLenient§r - Allows the player to join, but a warning will be shown to them.",
+  "teleidoscope.options.global.connectionTimeoutSeconds": "Connection Timeout",
+  "teleidoscope.options.global.connectionTimeoutSeconds.description": "When attempting to connect to a world, how long to wait for a successful connection before giving up and showing an error.\n\nIncrease this if you're on a slower or less stable connection and see timeouts when joining.",
+  "teleidoscope.options.global.isUnreliableLaneEnabled": "Allow Fast Background Data",
+  "teleidoscope.options.global.isUnreliableLaneEnabled.description": "Lets other mods send extra data alongside the game itself, prioritizing speed over guaranteed delivery. Turning this off may cause stuttering in features that those mods use it for, but reduces network overhead slightly.",
+
+  "teleidoscope.options.category.advanced": "Advanced",
+  "teleidoscope.options.advanced.steamNetworkingLogLevel": "Steam Networking Log Level",
+  "teleidoscope.options.advanced.steamNetworkingLogLevel.description": "Controls how much detail is written to your logs about the Steam connection used to share your world.\n\nYou normally won't need to change this — turn it up only if you're troubleshooting a connection problem or sharing logs for support.",
+  "teleidoscope.options.advanced.steamCallbackIntervalTicks": "Steam Callback Interval",
+  "teleidoscope.options.advanced.steamCallbackIntervalTicks.description": "How often Steam network updates are checked for. Lower values will be more responsive while higher values may reduce some overhead.\n\n§lNOTE:§r This setting is measured in Minecraft game ticks. So, for example, a value of 20 means Steam updates are checked for once a second. If you notice delayed connection status changes (e.g. a friend appearing to join later than they actually did), try lowering this.",
+
+  "teleidoscope.options.unit.seconds": "%d Seconds",
+  "teleidoscope.options.unit.minute": "%d Minute",
+  "teleidoscope.options.unit.tick": "%d Tick",
+  "teleidoscope.options.unit.ticks": "%d Ticks"
+}

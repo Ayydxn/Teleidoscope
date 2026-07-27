@@ -36,7 +36,8 @@ allprojects {
     }
 }
 
-subprojects {
+// Filter so that we only apply Loom and Minecraft setup to our mod subprojects.
+configure(subprojects.filter { it.name != "native-steamworks" }) {
     apply(plugin = "dev.architectury.loom")
     apply(plugin = "architectury-plugin")
     apply(plugin = "maven-publish")

@@ -10,4 +10,4 @@ pluginManagement {
 
 rootProject.name = "Teleidoscope"
 
-include("common", "fabric", "forge")
+include("common", "fabric", "forge", "native-steamworks")

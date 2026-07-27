@@ -38,3 +38,4 @@ replay_*.log
 .metadata
 .settings
 .architectury-transformer
+local.properties

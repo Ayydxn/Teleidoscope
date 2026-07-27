@@ -2,6 +2,8 @@ package me.ayydxn.teleidoscope;
 
 import dev.architectury.platform.Platform;
 import me.ayydxn.teleidoscope.options.TeleidoscopeGameOptions;
+import me.ayydxn.teleidoscope.steamworks.JNITest;
+import me.ayydxn.teleidoscope.util.natives.NativeLibraryLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
@@ -25,6 +27,10 @@ public class TeleidoscopeMod
             return;
 
         LOGGER.info("Initializing Teleidoscope... (Version: {})", Platform.getMod(MOD_ID).getVersion());
+
+        NativeLibraryLoader.load();
+
+        JNITest.ping();
 
         INSTANCE = new TeleidoscopeMod();
     }

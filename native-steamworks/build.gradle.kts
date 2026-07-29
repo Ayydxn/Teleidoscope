@@ -99,6 +99,24 @@ val compileNative by tasks.registering(Exec::class) {
 
             logger.lifecycle("Copied $libName into subproject resources: ${outputFolder.absolutePath}")
         }
+
+        val redistFile = when {
+            platform.startsWith("windows") -> file("$steamworksSdkLocation/redistributable_bin/win64/steam_api64.dll")
+            platform.startsWith("macos")   -> file("$steamworksSdkLocation/redistributable_bin/osx/libsteam_api.dylib")
+            else                            -> file("$steamworksSdkLocation/redistributable_bin/linux64/libsteam_api.so")
+        }
+
+        if (redistFile.exists()) {
+            val outputFolder = file("${generatedNativesDir.get().asFile}/natives/$platform")
+            copy {
+                from(redistFile)
+                into(outputFolder)
+            }
+
+            logger.lifecycle("Copied Steamworks redistributable (${redistFile.name}) into subproject resources: ${outputFolder.absolutePath}")
+        } else {
+            logger.warn("Steamworks redistributable not found at ${redistFile.absolutePath} - the built native will fail to load at runtime.")
+        }
     }
 }
 

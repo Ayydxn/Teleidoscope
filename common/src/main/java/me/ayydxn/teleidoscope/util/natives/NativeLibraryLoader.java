@@ -24,17 +24,19 @@ public final class NativeLibraryLoader
 
         String platform = resolvePlatform();
         String libraryFileName = resolveLibraryFileName(platform);
-        String resourcePath = "natives/" + platform + "/" + libraryFileName;
+        String redistributableFileName = resolveSteamworksRedistributableFileName(platform);
 
-        Path extractedLibrary = extractLibrary(resourcePath, libraryFileName);
+        Path extractedSteamLibrary = extractLibrary("natives/" + platform + "/" + redistributableFileName, redistributableFileName);
+        Path extractedTeleidoscopeLibrary = extractLibrary("natives/" + platform + "/" + libraryFileName, libraryFileName);
 
         try
         {
-            System.load(extractedLibrary.toAbsolutePath().toString());
+            System.load(extractedSteamLibrary.toAbsolutePath().toString());
+            System.load(extractedTeleidoscopeLibrary.toAbsolutePath().toString());
         }
         catch (UnsatisfiedLinkError error)
         {
-            throw new IllegalStateException(String.format("Failed to load Steamworks native library from '%s'!", extractedLibrary.toAbsolutePath()), error);
+            throw new IllegalStateException(String.format("Failed to load Steamworks native library from '%s'!", extractedTeleidoscopeLibrary.toAbsolutePath()), error);
         }
 
         TeleidoscopeMod.LOGGER.info("Loaded Steamworks native library ({}) for platform '{}'", libraryFileName, platform);
@@ -57,6 +59,17 @@ public final class NativeLibraryLoader
             return "linux-x64";
 
         throw new IllegalStateException(String.format("Unsupported platform for Steamworks natives %s %s", osName, osArch));
+    }
+
+    private static String resolveSteamworksRedistributableFileName(String platform)
+    {
+        return switch (platform)
+        {
+            case "windows-x64" -> "steam_api64.dll";
+            case "macos-x64", "macos-arm64" -> "libsteam_api.dylib";
+            case "linux-x64" -> "libsteam_api.so";
+            default -> throw new IllegalStateException(String.format("No Steamworks redistributable filename for the platform '%s'!", platform));
+        };
     }
 
     private static String resolveLibraryFileName(String platform)

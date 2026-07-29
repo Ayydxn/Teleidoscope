@@ -15,8 +15,8 @@
   "icon": "assets/${mod_id}/${icon_path}",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "me.ayydxn.teleidoscope.fabric.TeleidoscopeFabricMod"
+    "client": [
+      "me.ayydxn.teleidoscope.fabric.TeleidoscopeFabricClientMod"
     ],
     "modmenu": [
       "me.ayydxn.teleidoscope.fabric.TeleidoscopeModMenuEntrypoint"

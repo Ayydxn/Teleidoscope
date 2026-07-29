@@ -1,12 +1,17 @@
 package me.ayydxn.teleidoscope;
 
+import dev.architectury.event.events.client.ClientLifecycleEvent;
+import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.platform.Platform;
+import me.ayydxn.teleidoscope.client.gui.screens.TeleidoscopeOptionsScreen;
 import me.ayydxn.teleidoscope.options.TeleidoscopeGameOptions;
-import me.ayydxn.teleidoscope.steamworks.JNITest;
-import me.ayydxn.teleidoscope.util.natives.NativeLibraryLoader;
+import me.ayydxn.teleidoscope.steam.SteamManager;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
+@Environment(EnvType.CLIENT)
 public class TeleidoscopeMod
 {
     private static volatile TeleidoscopeMod INSTANCE;
@@ -28,9 +33,11 @@ public class TeleidoscopeMod
 
         LOGGER.info("Initializing Teleidoscope... (Version: {})", Platform.getMod(MOD_ID).getVersion());
 
-        NativeLibraryLoader.load();
+        Platform.getMod(TeleidoscopeMod.MOD_ID).registerConfigurationScreen(parent -> new TeleidoscopeOptionsScreen(parent).getHandle());
 
-        JNITest.ping();
+        ClientLifecycleEvent.CLIENT_STARTED.register(client -> SteamManager.initialize());
+        ClientTickEvent.CLIENT_POST.register(client -> SteamManager.getInstance().ifPresent(SteamManager::tick));
+        ClientLifecycleEvent.CLIENT_STOPPING.register(client -> SteamManager.getInstance().ifPresent(SteamManager::shutdown));
 
         INSTANCE = new TeleidoscopeMod();
     }

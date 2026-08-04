@@ -25,6 +25,16 @@
   "teleidoscope.options.advanced.steamCallbackIntervalTicks": "Steam Callback Interval",
   "teleidoscope.options.advanced.steamCallbackIntervalTicks.description": "How often Steam network updates are checked for. Lower values will be more responsive while higher values may reduce some overhead.\n\n§lNOTE:§r This setting is measured in Minecraft game ticks. So, for example, a value of 20 means Steam updates are checked for once a second. If you notice delayed connection status changes (e.g. a friend appearing to join later than they actually did), try lowering this.",
 
+  "teleidoscope.options.handshakeEnforcement.strict": "Strict",
+  "teleidoscope.options.handshakeEnforcement.lenient": "Lenient",
+  "teleidoscope.options.steamNetworkingLogLevel.off": "Off",
+  "teleidoscope.options.steamNetworkingLogLevel.debug": "Debug",
+  "teleidoscope.options.steamNetworkingLogLevel.warning": "Warning",
+  "teleidoscope.options.steamNetworkingLogLevel.error": "Error",
+  "teleidoscope.options.lobbyVisibility.friendsOnly": "Friends Only",
+  "teleidoscope.options.lobbyVisibility.inviteOnly": "Invite Only",
+  "teleidoscope.options.lobbyVisibility.private": "Private",
+
   "teleidoscope.options.unit.seconds": "%d Seconds",
   "teleidoscope.options.unit.minute": "%d Minute",
   "teleidoscope.options.unit.tick": "%d Tick",

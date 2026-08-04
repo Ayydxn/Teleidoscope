@@ -72,47 +72,61 @@ public class TeleidoscopeGameOptions
 
     public enum HandshakeEnforcement implements NameableEnum
     {
-        STRICT,
-        LENIENT;
+        STRICT("teleidoscope.options.handshakeEnforcement.strict"),
+        LENIENT("teleidoscope.options.handshakeEnforcement.lenient");
+
+        private final String translationKey;
+
+        HandshakeEnforcement(String translationKey)
+        {
+            this.translationKey = translationKey;
+        }
 
         @Override
         public Component getDisplayName()
         {
-            return Component.literal(this.name().charAt(0) + this.name().substring(1).toLowerCase());
+            return Component.translatable(this.translationKey);
         }
     }
 
     public enum SteamNetworkingLogLevel implements NameableEnum
     {
-        OFF,
-        DEBUG,
-        WARNING,
-        ERROR;
+        OFF("teleidoscope.options.steamNetworkingLogLevel.off"),
+        DEBUG("teleidoscope.options.steamNetworkingLogLevel.debug"),
+        WARNING("teleidoscope.options.steamNetworkingLogLevel.warning"),
+        ERROR("teleidoscope.options.steamNetworkingLogLevel.error");
+
+        private final String translationKey;
+
+        SteamNetworkingLogLevel(String translationKey)
+        {
+            this.translationKey = translationKey;
+        }
 
         @Override
         public Component getDisplayName()
         {
-            return Component.literal(this.name().charAt(0) + this.name().substring(1).toLowerCase());
+            return Component.translatable(this.translationKey);
         }
     }
 
     public enum LobbyVisibility implements NameableEnum
     {
-        FRIENDS_ONLY("Friends Only"),
-        INVITE_ONLY("Invite Only"),
-        PRIVATE("Private");
+        FRIENDS_ONLY("teleidoscope.options.lobbyVisibility.friendsOnly"),
+        INVITE_ONLY("teleidoscope.options.lobbyVisibility.inviteOnly"),
+        PRIVATE("teleidoscope.options.lobbyVisibility.private");
 
-        private final String displayName;
+        private final String translationKey;
 
-        LobbyVisibility(String displayName)
+        LobbyVisibility(String translationKey)
         {
-            this.displayName = displayName;
+            this.translationKey = translationKey;
         }
 
         @Override
         public Component getDisplayName()
         {
-            return Component.literal(this.displayName);
+            return Component.translatable(this.translationKey);
         }
     }
 }

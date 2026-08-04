@@ -1,5 +1,8 @@
 {
+  "teleidoscope.gui.options": "Teleidoscope Options",
+
   "teleidoscope.options.category.global": "Global",
+  "teldeidoscope.options.global.game": "Game",
   "teleidoscope.options.global.openWorldOnLaunch": "Open World On Launch",
   "teleidoscope.options.global.openWorldOnLaunch.description": "Once loaded into a world, it will be automatically opened to your Steam friends.",
   "teleidoscope.options.global.isRichPresenceEnabled": "Enable Rich Presence",
@@ -12,6 +15,9 @@
   "teleidoscope.options.global.connectionTimeoutSeconds.description": "When attempting to connect to a world, how long to wait for a successful connection before giving up and showing an error.\n\nIncrease this if you're on a slower or less stable connection and see timeouts when joining.",
   "teleidoscope.options.global.isUnreliableLaneEnabled": "Allow Fast Background Data",
   "teleidoscope.options.global.isUnreliableLaneEnabled.description": "Lets other mods send extra data alongside the game itself, prioritizing speed over guaranteed delivery. Turning this off may cause stuttering in features that those mods use it for, but reduces network overhead slightly.",
+  "teleidoscope.options.global.miscellaneous": "Miscellaneous",
+  "teleidoscope.options.miscellaneous.attemptSteamReconnection": "Attempt Steam Reconnection",
+  "teleidoscope.options.miscellaneous.attemptSteamReconnection.description": "Retries connecting Teleidoscope to the Steam desktop app. §lOnly available when there is no active Steam connection.§r\n\nMake sure the Steam app is running and you're logged in, then click this button.\n\nA Steam connection is required to host worlds for friends or join worlds from Steam invites.",
 
   "teleidoscope.options.category.advanced": "Advanced",
   "teleidoscope.options.advanced.steamNetworkingLogLevel": "Steam Networking Log Level",

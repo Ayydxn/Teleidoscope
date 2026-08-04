@@ -1,11 +1,15 @@
 package me.ayydxn.teleidoscope.options.util;
 
+import dev.isxander.yacl3.api.ButtonOption;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
+import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.*;
+import dev.isxander.yacl3.gui.YACLScreen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -13,6 +17,16 @@ public final class OptionsFactory
 {
     private OptionsFactory()
     {
+    }
+
+    public static ButtonOption action(String translationKey, BiConsumer<YACLScreen, ButtonOption> onButtonPressed)
+    {
+        return ButtonOption.createBuilder()
+                .name(Component.translatable(translationKey))
+                .description(OptionDescription.of(Component.translatable(translationKey + ".description")))
+                .action(onButtonPressed)
+                .text(Component.literal(""))
+                .build();
     }
 
     public static Option<Boolean> toggle(String translationKey, boolean defaultValue, Supplier<Boolean> getter, Consumer<Boolean> setter)
@@ -44,11 +58,6 @@ public final class OptionsFactory
                     return builder;
                 })
                 .build();
-    }
-
-    public static Option<Integer> intSlider(String translationKey, int defaultValue, Supplier<Integer> getter, Consumer<Integer> setter, int min, int max, int step)
-    {
-        return intSlider(translationKey, defaultValue, getter, setter, min, max, step, null);
     }
 
     public static <E extends Enum<E>> Option<E> enumCycle(String translationKey, Class<E> enumType, E defaultValue, Supplier<E> getter, Consumer<E> setter)

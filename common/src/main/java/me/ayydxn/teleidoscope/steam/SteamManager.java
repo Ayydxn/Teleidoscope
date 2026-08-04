@@ -7,8 +7,6 @@ import me.ayydxn.teleidoscope.steamworks.SteamAPI;
 import me.ayydxn.teleidoscope.steamworks.SteamAPIInitResponse;
 import me.ayydxn.teleidoscope.util.natives.NativeLibraryLoader;
 
-import java.util.Optional;
-
 public class SteamManager
 {
     private static SteamManager INSTANCE;
@@ -16,63 +14,91 @@ public class SteamManager
     // TODO: (Ayydxn) Somehow get and pay Valve $100 for a custom app ID so we don't have to deal with the overlay reporting us as playing Spacewar.
     private static final int STEAM_APP_ID = 480;
 
-    private boolean isInitialized = false;
+    private ConnectionStatus connectionStatus;
+    private int ticksSinceLastCallback = 0;
 
     private SteamManager()
     {
     }
 
-    public static synchronized void initialize()
+    public boolean initialize()
     {
-        if (INSTANCE != null)
-            return;
+        if (this.connectionStatus == ConnectionStatus.INITIALIZING)
+            return true;
 
-        INSTANCE = new SteamManager();
-        INSTANCE.trySteamInitialization();
+        NativeLibraryLoader.load();
+
+        SteamUtils.writeSteamAppIdFile(Platform.getGameFolder(), STEAM_APP_ID);
+
+        this.connectionStatus = ConnectionStatus.INITIALIZING;
+
+        TeleidoscopeMod.LOGGER.info("Attempting to connect to Steam...");
+
+        SteamAPIInitResponse steamInitializationResponse = SteamAPI.initEx();
+        if (!steamInitializationResponse.isSuccess())
+        {
+            TeleidoscopeMod.LOGGER.error("Failed to connect to Steam! (Result: {}, Reason: {})", steamInitializationResponse.result(),
+                    steamInitializationResponse.errorMessage());
+
+            this.connectionStatus = ConnectionStatus.FAILED;
+
+            return false;
+        }
+
+        TeleidoscopeMod.LOGGER.info("Successfully connected to Steam!");
+
+        this.connectionStatus = ConnectionStatus.CONNECTED;
+
+        return true;
     }
 
     public void tick()
     {
-        if (!this.isInitialized)
+        if (this.connectionStatus != ConnectionStatus.CONNECTED)
+            return;
+
+        int steamCallbackIntervalTicks = TeleidoscopeMod.getInstance().getGameOptions().advancedSettings.steamCallbackIntervalTicks;
+
+        this.ticksSinceLastCallback++;
+
+        if (this.ticksSinceLastCallback < steamCallbackIntervalTicks)
             return;
 
         SteamAPI.runCallbacks();
+
+        this.ticksSinceLastCallback = 0;
     }
 
     public void shutdown()
     {
-        if (!this.isInitialized)
+        if (this.connectionStatus != ConnectionStatus.CONNECTED)
             return;
 
         TeleidoscopeMod.LOGGER.info("Shutting down Steamworks...");
 
         SteamAPI.shutdown();
 
-        this.isInitialized = false;
+        this.connectionStatus = ConnectionStatus.OFFLINE;
     }
 
-    private void trySteamInitialization()
+    public synchronized static SteamManager getInstance()
     {
-        NativeLibraryLoader.load();
+        if (INSTANCE == null)
+            INSTANCE = new SteamManager();
 
-        SteamUtils.writeSteamAppIdFile(Platform.getGameFolder(), STEAM_APP_ID);
-
-        SteamAPIInitResponse steamInitializationResponse = SteamAPI.initEx();
-        if (!steamInitializationResponse.isSuccess())
-        {
-            TeleidoscopeMod.LOGGER.error("Failed to initialize Steamworks! (Result: {}, Reason: {})", steamInitializationResponse.result(),
-                    steamInitializationResponse.errorMessage());
-
-            return;
-        }
-
-        TeleidoscopeMod.LOGGER.info("Successfully initialized Steamworks!");
-
-        this.isInitialized = true;
+        return INSTANCE;
     }
 
-    public static Optional<SteamManager> getInstance()
+    public ConnectionStatus getStatus()
     {
-        return Optional.ofNullable(INSTANCE);
+        return this.connectionStatus;
+    }
+
+    public enum ConnectionStatus
+    {
+        OFFLINE,
+        INITIALIZING,
+        CONNECTED,
+        FAILED
     }
 }

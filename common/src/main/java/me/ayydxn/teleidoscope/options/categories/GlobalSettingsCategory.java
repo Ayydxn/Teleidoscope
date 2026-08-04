@@ -1,9 +1,16 @@
 package me.ayydxn.teleidoscope.options.categories;
 
+import dev.isxander.yacl3.api.ButtonOption;
 import dev.isxander.yacl3.api.ConfigCategory;
+import dev.isxander.yacl3.api.OptionGroup;
+import dev.isxander.yacl3.gui.YACLScreen;
 import me.ayydxn.teleidoscope.options.TeleidoscopeGameOptions;
 import me.ayydxn.teleidoscope.options.util.OptionsCategory;
 import me.ayydxn.teleidoscope.options.util.OptionsFactory;
+import me.ayydxn.teleidoscope.steam.SteamManager;
+import me.ayydxn.teleidoscope.steam.util.SteamUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.SystemToast;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +22,8 @@ public class GlobalSettingsCategory implements OptionsCategory
         TeleidoscopeGameOptions.GlobalSettings globalSettings = gameOptions.globalSettings;
         TeleidoscopeGameOptions.GlobalSettings defaultGlobalSettings = TeleidoscopeGameOptions.defaults().globalSettings;
 
-        return ConfigCategory.createBuilder()
-                .name(Component.translatable("teleidoscope.options.category.global"))
+        OptionGroup gameOptionsGroup = OptionGroup.createBuilder()
+                .name(Component.translatable("teldeidoscope.options.global.game"))
                 .option(OptionsFactory.toggle("teleidoscope.options.global.openWorldOnLaunch",
                         defaultGlobalSettings.openWorldOnLaunch,
                         () -> globalSettings.openWorldOnLaunch,
@@ -49,6 +56,32 @@ public class GlobalSettingsCategory implements OptionsCategory
                         defaultGlobalSettings.isUnreliableLaneEnabled,
                         () -> globalSettings.isUnreliableLaneEnabled,
                         newValue -> globalSettings.isUnreliableLaneEnabled = newValue))
+                .build();
+
+        ButtonOption steamReconnectionOption = OptionsFactory.action("teleidoscope.options.miscellaneous.attemptSteamReconnection", (screen, option) ->
+        {
+            if (SteamManager.getInstance().initialize())
+            {
+                SteamUtils.showSuccessfulConnectionToast(Minecraft.getInstance());
+            }
+            else
+            {
+                SteamUtils.showFailedConnectionToast(Minecraft.getInstance());
+            }
+
+            option.setAvailable(SteamManager.getInstance().getStatus() != SteamManager.ConnectionStatus.CONNECTED);
+        });
+        steamReconnectionOption.setAvailable(SteamManager.getInstance().getStatus() != SteamManager.ConnectionStatus.CONNECTED);
+
+        OptionGroup miscellaneousOptionsGroup = OptionGroup.createBuilder()
+                .name(Component.translatable("teleidoscope.options.global.miscellaneous"))
+                .option(steamReconnectionOption)
+                .build();
+
+        return ConfigCategory.createBuilder()
+                .name(Component.translatable("teleidoscope.options.category.global"))
+                .group(gameOptionsGroup)
+                .group(miscellaneousOptionsGroup)
                 .build();
     }
 }
